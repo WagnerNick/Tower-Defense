@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlacementSystem : MonoBehaviour
 {
     [SerializeField] private Grid grid;
+    [SerializeField] private PathDataSO pathData;
     [SerializeField] private ObjectDatabaseSO database;
     [SerializeField] private GameObject gridVisual;
     [SerializeField] private PreviewSystem preview;
@@ -27,7 +28,7 @@ public class PlacementSystem : MonoBehaviour
     {
         StopPlacement();
         gridVisual.SetActive(true);
-        buildingState = new PlacementState(ID, grid, preview, database, powerData, towerData, objectPlacer);
+        buildingState = new PlacementState(ID, grid, preview, database, powerData, towerData, pathData, objectPlacer);
         InputManager.Instance.OnClick += PlaceObject;
         InputManager.Instance.OnCancel += StopPlacement;
     }

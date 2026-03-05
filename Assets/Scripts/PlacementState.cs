@@ -9,6 +9,7 @@ public class PlacementState : IBuildingState
     ObjectDatabaseSO database;
     GridData powerData;
     GridData towerData;
+    PathDataSO pathData;
     ObjectPlacer objectPlacer;
 
     public PlacementState(int iD,
@@ -17,6 +18,7 @@ public class PlacementState : IBuildingState
                           ObjectDatabaseSO database,
                           GridData powerData,
                           GridData towerData,
+                          PathDataSO pathData,
                           ObjectPlacer objectPlacer)
     {
         ID = iD;
@@ -25,6 +27,7 @@ public class PlacementState : IBuildingState
         this.database = database;
         this.powerData = powerData;
         this.towerData = towerData;
+        this.pathData = pathData;
         this.objectPlacer = objectPlacer;
 
         selectedObjectIndex = database.objectData.FindIndex(data => data.ID == ID);
@@ -55,8 +58,25 @@ public class PlacementState : IBuildingState
 
     private bool CheckPlacement(Vector3Int gridPos, int selectedObjectIndex)
     {
+        Vector2Int size = database.objectData[selectedObjectIndex].Size;
         GridData selectedData = database.objectData[selectedObjectIndex].ID == 0 ? powerData : towerData;
-        return selectedData.CanPlaceObjectAt(gridPos, database.objectData[selectedObjectIndex].Size);
+        if (!selectedData.CanPlaceObjectAt(gridPos, size))
+            return false;
+
+        if (pathData != null && pathData.path != null)
+        {
+            for (int x = 0; x < size.x; x++)
+            {
+                for (int y = 0; y < size.y; y++)
+                {
+                    Vector3Int pos = gridPos + new Vector3Int(x, 0, y);
+                    if (pathData.path.Contains(pos))
+                        return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public void UpdateState(Vector3Int gridPos)
