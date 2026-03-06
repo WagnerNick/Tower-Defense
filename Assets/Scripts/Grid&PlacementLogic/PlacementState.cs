@@ -63,14 +63,14 @@ public class PlacementState : IBuildingState
         if (!selectedData.CanPlaceObjectAt(gridPos, size))
             return false;
 
-        if (pathData != null && pathData.path != null)
+        if (pathData != null && pathData.cell != null)
         {
             for (int x = 0; x < size.x; x++)
             {
                 for (int y = 0; y < size.y; y++)
                 {
                     Vector3Int pos = gridPos + new Vector3Int(x, 0, y);
-                    if (pathData.path.Contains(pos))
+                    if (pathData.cell.Contains(pos))
                         return false;
                 }
             }
