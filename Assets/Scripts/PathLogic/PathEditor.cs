@@ -10,7 +10,7 @@ public class PathEditor : MonoBehaviour
     public Vector3Int startCell;
     public Vector3Int endCell;
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (pathData == null || grid == null) return;
 

@@ -5,10 +5,11 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private PathDataSO path;
     public float speed = 1f;
-    private int target = 1;
-    private void Start()
+    [HideInInspector] public int target;
+    private void OnEnable()
     {
         transform.position = path.cell[0];
+        target = 1;
     }
 
     private void Update()
@@ -20,6 +21,11 @@ public class Enemy : MonoBehaviour
             {
                 target++;
             }
+        }
+        else
+        {
+            EnemyPool.Instance.ReturnToPool(this);
+            EnemyPool.Instance.aliveEnemies--;
         }
     }
 }
