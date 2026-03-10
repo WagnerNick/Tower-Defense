@@ -27,7 +27,6 @@ public class Enemy : MonoBehaviour
         else
         {
             EnemyPool.Instance.ReturnToPool(this);
-            EnemyPool.Instance.aliveEnemies--;
         }
     }
 }
