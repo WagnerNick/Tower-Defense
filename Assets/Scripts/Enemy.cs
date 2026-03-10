@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private PathDataSO path;
+    [SerializeField] public PathDataSO path;
+    public Transform center;
     public float speed = 1f;
     [HideInInspector] public int target;
+
     private void OnEnable()
     {
         transform.position = path.cell[0];
