@@ -3,14 +3,17 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     [SerializeField] private Transform rotationPoint;
+    [SerializeField] private Transform firePoint;
     private Transform target;
 
+    [Header("Attributes")]
     public float range = 15f;
+    public float fireRate = 1f;
+    private float fireCountdown = 0f;
+
     public float turnSpeed = 10f;
     public int targetMode = 0;
 
-    public float fireRate = 1f;
-    private float fireCountdown = 0f;
 
     private void Start()
     {
@@ -54,7 +57,10 @@ public class Tower : MonoBehaviour
 
     private void Shoot()
     {
-        Debug.Log("Shoot");
+        Dart dart = DartPool.Instance.Get();
+        dart.transform.SetPositionAndRotation(firePoint.position, firePoint.rotation);
+        dart.Seek(target);
+        dart.gameObject.SetActive(true);
     }
 
     private void Close(GameObject[] enemies)
@@ -74,6 +80,8 @@ public class Tower : MonoBehaviour
 
         if (nearestEnemy != null && shortestDist <= range)
         {
+            if (target != nearestEnemy.transform)
+                fireCountdown = 1f / fireRate;
             target = nearestEnemy.transform;
         }
         else
@@ -97,6 +105,8 @@ public class Tower : MonoBehaviour
         }
         if (firstEnemy != null && Vector3.Distance(rotationPoint.position, firstEnemy.transform.position) <= range)
         {
+            if (target != firstEnemy.transform)
+                fireCountdown = 1f / fireRate;
             target = firstEnemy.transform;
         }
         else

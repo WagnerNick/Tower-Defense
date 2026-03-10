@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 2904531437411616673}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 0, z: 4}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyTest
   path: {fileID: 11400000, guid: 2fb474cb2a6ce984a944eea22120bde2, type: 2}
-  speed: 10
+  speed: 2.5
   target: 0
 --- !u!1 &4541654454689655169
 GameObject:

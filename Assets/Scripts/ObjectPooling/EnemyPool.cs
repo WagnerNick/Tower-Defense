@@ -28,6 +28,7 @@ public class EnemyPool : PersistentSingleton<EnemyPool>
 
     public void ReturnToPool(Enemy enemy)
     {
+        aliveEnemies--;
         enemy.gameObject.SetActive(false);
         pool.Enqueue(enemy);
     }
