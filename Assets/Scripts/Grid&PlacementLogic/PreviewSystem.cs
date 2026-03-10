@@ -38,6 +38,10 @@ public class PreviewSystem : MonoBehaviour
 
     private void PreparePreview(GameObject previewObject)
     {
+        MonoBehaviour[] behaviours = previewObject.GetComponents<MonoBehaviour>();
+        foreach (MonoBehaviour behaviour in behaviours)
+            behaviour.enabled = false;
+
         Renderer[] renderers = previewObject.GetComponentsInChildren<Renderer>();
         foreach (Renderer renderer in renderers)
         {

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyTest
   path: {fileID: 11400000, guid: 2fb474cb2a6ce984a944eea22120bde2, type: 2}
+  center: {fileID: 0}
   speed: 2.5
   target: 0
 --- !u!1 &4541654454689655169
@@ -60,7 +61,7 @@ GameObject:
   - component: {fileID: 8199024122507502502}
   - component: {fileID: 7180516970278347414}
   - component: {fileID: 4765446100445015563}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Balloon
   m_TagString: Enemy
   m_Icon: {fileID: 0}
