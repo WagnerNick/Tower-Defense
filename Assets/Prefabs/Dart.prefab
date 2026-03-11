@@ -103,4 +103,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c612b135087df0542a3e63a88be88585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dart
-  speed: 70
+  speed: 30
+  pierce: 2
+  hitRadius: 0.5

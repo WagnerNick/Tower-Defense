@@ -5,7 +5,6 @@ public class EnemyPool : PersistentSingleton<EnemyPool>
 {
     [SerializeField] private Enemy enemyPrefab;
     private Queue<Enemy> pool = new();
-    public int aliveEnemies = 0;
 
     public Enemy Get()
     {
@@ -28,7 +27,6 @@ public class EnemyPool : PersistentSingleton<EnemyPool>
 
     public void ReturnToPool(Enemy enemy)
     {
-        aliveEnemies--;
         enemy.gameObject.SetActive(false);
         pool.Enqueue(enemy);
     }

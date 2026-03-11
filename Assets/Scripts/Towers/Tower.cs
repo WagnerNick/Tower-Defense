@@ -1,118 +1,179 @@
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
+public enum TargetMode
+{
+    First,
+    Last,
+    Close,
+    Strong
+}
 
 public class Tower : MonoBehaviour
 {
     [SerializeField] private Transform rotationPoint;
     [SerializeField] private Transform firePoint;
-    private Transform target;
+
+    public Transform target;
 
     [Header("Attributes")]
     public float range = 15f;
     public float fireRate = 1f;
-    private float fireCountdown = 0f;
+    private float fireCountdown;
 
-    public float turnSpeed = 10f;
-    public int targetMode = 0;
-
+    public TargetMode targetMode;
 
     private void Start()
     {
-        InvokeRepeating("UpdateTarget", 0f, 0.5f);
-    }
-
-    void UpdateTarget()
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-
-        switch (targetMode)
-        {
-            case 0:
-                Close(enemies);
-                break;
-            case 1:
-                First(enemies);
-                break;
-        }
+        fireCountdown = Random.Range(0f, 1f / fireRate);
+        InvokeRepeating("UpdateTarget", 0f, 0.25f);
     }
 
     private void Update()
     {
-        if (target == null)
-            return;
-
-        //Target lock on
-        Vector3 dir = target.position - rotationPoint.position;
-        Quaternion lookRotation = Quaternion.LookRotation(dir);
-        Vector3 rotation = Quaternion.Lerp(rotationPoint.rotation, lookRotation, turnSpeed * Time.deltaTime).eulerAngles;
-        rotationPoint.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+        fireCountdown -= Time.deltaTime;
 
         if (fireCountdown <= 0f)
         {
-            Shoot();
-            fireCountdown = 1f / fireRate;
+            if (target != null)
+            {
+                Shoot();
+                fireCountdown = 1f / fireRate;
+            }
         }
+    }
 
-        fireCountdown -= Time.deltaTime;
+    void UpdateTarget()
+    {
+        var enemies = EnemyGrid.Instance.GetNearbyEnemies(transform.position);
+        target = GetTarget(enemies);
     }
 
     private void Shoot()
     {
+        if (target == null || !target.gameObject.activeInHierarchy)
+        {
+            target = null;
+            return;
+        }
+
+        Enemy enemy = target.GetComponentInParent<Enemy>();
+
+        if (enemy == null || enemy.center == null)
+        {
+            target = null;
+            return;
+        }
+
         Dart dart = DartPool.Instance.Get();
-        dart.transform.SetPositionAndRotation(firePoint.position, firePoint.rotation);
-        dart.Seek(target);
+        float projectileSpeed = dart.speed;
+
+        Vector3 aimPoint = PredictEnemyPosition(enemy, firePoint.position, projectileSpeed);
+
+        Vector3 dir = aimPoint - firePoint.position;
+        dir.y = 0f;
+        dir.Normalize();
+
+        rotationPoint.rotation = Quaternion.LookRotation(dir);
+
+        dart.transform.SetPositionAndRotation(firePoint.position, Quaternion.LookRotation(dir));
+        dart.Fire(dir);
         dart.gameObject.SetActive(true);
+        Debug.DrawLine(firePoint.position, aimPoint, Color.red, 1f);
     }
 
-    private void Close(GameObject[] enemies)
+    Vector3 PredictEnemyPosition(Enemy enemy, Vector3 firePos, float projectileSpeed)
     {
-        float shortestDist = Mathf.Infinity;
-        GameObject nearestEnemy = null;
+        Vector3 predicted = enemy.center.position;
 
-        foreach (GameObject enemy in enemies)
+        for (int i = 0; i < 5; i++)
         {
-            float distToEnemy = Vector3.Distance(rotationPoint.position, enemy.transform.position);
-            if (distToEnemy < shortestDist)
-            {
-                shortestDist = distToEnemy;
-                nearestEnemy = enemy;
-            }
-        }
+            float dist = Vector3.Distance(firePos, predicted);
+            float travelTime = dist / projectileSpeed;
 
-        if (nearestEnemy != null && shortestDist <= range)
-        {
-            if (target != nearestEnemy.transform)
-                fireCountdown = 1f / fireRate;
-            target = nearestEnemy.transform;
+            predicted = PredictPathPosition(enemy, enemy.speed * travelTime);
         }
-        else
-        {
-            target = null;
-        }
+        return predicted;
     }
 
-    private void First(GameObject[] enemies)
+    Vector3 PredictPathPosition(Enemy enemy, float distance)
     {
-        int highestWaypoint = 0;
-        GameObject firstEnemy = null;
-        foreach (GameObject enemy in enemies)
+        Vector3 centerOffset = enemy.center.position - enemy.transform.position;
+        centerOffset.y = 0f;
+
+        int waypoint = enemy.target;
+        Vector3 currentPos = enemy.transform.position;
+        float remaining = distance;
+
+        while (waypoint < enemy.path.cell.Count)
         {
-            int currentWaypoint = enemy.GetComponentInParent<Enemy>().target;
-            if (currentWaypoint > highestWaypoint)
+            Vector3 next = enemy.path.cell[waypoint];
+            float segmentLength = Vector3.Distance(currentPos, next);
+
+            if (remaining <= segmentLength)
             {
-                highestWaypoint = currentWaypoint;
-                firstEnemy = enemy;
+                Vector3 rootPos = Vector3.Lerp(currentPos, next, remaining / segmentLength);
+                Vector3 finalPos = rootPos + centerOffset;
+                finalPos.y = enemy.center.position.y;
+                return finalPos;
+            }
+
+            remaining -= segmentLength;
+            currentPos = next;
+            waypoint++;
+        }
+        Vector3 endRoot = enemy.path.cell[^1];
+        Vector3 endPos = endRoot + centerOffset;
+        endPos.y = enemy.center.position.y;
+        return endPos;
+    }
+
+    Transform GetTarget(List<Enemy> enemies)
+    {
+        Enemy bestEnemy = null;
+        float bestValue = 0f;
+
+        foreach (Enemy enemy in enemies)
+        {
+            float dist = Vector3.Distance(firePoint.position, enemy.center.position);
+
+            if (dist > range)
+                continue;
+
+            switch (targetMode)
+            {
+                case TargetMode.First:
+                    if (enemy.pathProgress > bestValue)
+                    {
+                        bestValue = enemy.pathProgress;
+                        bestEnemy = enemy;
+                    }
+                    break;
+                case TargetMode.Last:
+                    if (bestEnemy == null || enemy.pathProgress < bestValue)
+                    {
+                        bestValue = enemy.pathProgress;
+                        bestEnemy = enemy;
+                    }
+                    break;
+                case TargetMode.Close:
+                    if (bestEnemy == null || dist < bestValue)
+                    {
+                        bestValue = dist;
+                        bestEnemy = enemy;
+                    }
+                    break;
+                case TargetMode.Strong:
+                    if (bestEnemy == null || enemy.speed > bestValue)
+                    {
+                        bestValue = enemy.speed;
+                        bestEnemy = enemy;
+                    }
+                    break;
             }
         }
-        if (firstEnemy != null && Vector3.Distance(rotationPoint.position, firstEnemy.transform.position) <= range)
-        {
-            if (target != firstEnemy.transform)
-                fireCountdown = 1f / fireRate;
-            target = firstEnemy.transform;
-        }
-        else
-        {
-            target = null;
-        }
+        return bestEnemy != null ? bestEnemy.center.transform : null;
     }
 
     private void OnDrawGizmosSelected()
