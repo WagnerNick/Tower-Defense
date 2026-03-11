@@ -29,14 +29,30 @@ public class EnemyGrid : MonoBehaviour
             grid[cell] = new List<Enemy>();
 
         grid[cell].Add(enemy);
+        enemy.currentCell = cell;
     }
 
     public void RemoveEnemy(Enemy enemy)
     {
-        Vector2Int cell = GetCell(enemy.transform.position);
+        if (grid.ContainsKey(enemy.currentCell))
+            grid[enemy.currentCell].Remove(enemy);
+    }
 
-        if (grid.ContainsKey(cell))
-            grid[cell].Remove(enemy);
+    public void UpdateEnemy(Enemy enemy)
+    {
+        Vector2Int newCell = GetCell(enemy.transform.position);
+
+        if (newCell == enemy.currentCell)
+            return;
+
+        if (grid.ContainsKey(enemy.currentCell))
+            grid[enemy.currentCell].Remove(enemy);
+
+        if (!grid.ContainsKey(newCell))
+            grid[newCell] = new List<Enemy>();
+
+        grid[newCell].Add(enemy);
+        enemy.currentCell = newCell;
     }
 
     public List<Enemy> GetNearbyEnemies(Vector3 position)

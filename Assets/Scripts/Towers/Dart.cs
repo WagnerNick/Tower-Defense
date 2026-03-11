@@ -4,7 +4,8 @@ using UnityEngine;
 public class Dart : MonoBehaviour
 {
     public float speed = 70f;
-    public int pierce = 2;
+    public int maxPierce = 2;
+    private int currentPierce = 0;
     public float hitRadius = 0.3f;
 
     private Vector3 direction;
@@ -16,7 +17,7 @@ public class Dart : MonoBehaviour
     {
         direction = dir.normalized;
         transform.forward = direction;
-
+        currentPierce = maxPierce;
         hitEnemies.Clear();
         lastPosition = transform.position;
     }
@@ -28,6 +29,9 @@ public class Dart : MonoBehaviour
         CheckHits(transform.position, newPos);
         transform.position = newPos;
         lastPosition = newPos;
+
+        if (IsOutsideCameraView())
+            DartPool.Instance.ReturnToPool(this);
     }
 
     void CheckHits(Vector3 start, Vector3 end)
@@ -55,12 +59,23 @@ public class Dart : MonoBehaviour
         popFx.transform.SetPositionAndRotation(transform.position, popFx.transform.rotation);
         popFx.gameObject.SetActive(true);
 
-        EnemyPool.Instance.ReturnToPool(enemy);
+        IDamageable damageable = enemy.GetComponentInParent<IDamageable>();
+        if (damageable != null)
+        {
+            damageable.Damage(1);
+        }
+        //EnemyPool.Instance.ReturnToPool(enemy);
 
-        pierce--;
+        currentPierce--;
 
-        if (pierce <= 0)
+        if (currentPierce <= 0)
             DartPool.Instance.ReturnToPool(this);
+    }
+
+    bool IsOutsideCameraView()
+    {
+        Vector3 vp = Camera.main.WorldToViewportPoint(transform.position);
+        return vp.x < 0f || vp.x > 1f || vp.y < 0f || vp.y > 1f;
     }
 
     float DistancePointToSegment(Vector3 point, Vector3 a, Vector3 b)

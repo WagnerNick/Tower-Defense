@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 640566245550647701}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 1.43}
+  m_LocalPosition: {x: 0, y: -0, z: 0.584}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1624927343450456184}
   - component: {fileID: 6522099931298644913}
+  - component: {fileID: 7263244410928540326}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -81,6 +82,21 @@ MonoBehaviour:
   speed: 5
   target: 0
   pathProgress: 0
+  currentCell: {x: 0, y: 0}
+--- !u!114 &7263244410928540326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2904531437411616673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb4255f924b45674da4b0e010c1fb6b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  initialType: {fileID: 11400000, guid: d52b49c463a9a9d4cbc372c051d3f4a8, type: 2}
+  balloonRenderer: {fileID: 7180516970278347414}
 --- !u!1 &4541654454689655169
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,7 +108,7 @@ GameObject:
   - component: {fileID: 3684728833381777095}
   - component: {fileID: 8199024122507502502}
   - component: {fileID: 7180516970278347414}
-  - component: {fileID: 4765446100445015563}
+  - component: {fileID: 8324228109527574896}
   m_Layer: 6
   m_Name: Balloon
   m_TagString: Enemy
@@ -110,7 +126,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.5, y: 0, z: 0, w: 0.8660254}
   m_LocalPosition: {x: 0.5, y: 0.15, z: 0.2}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1402696651901215829}
@@ -173,7 +189,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4765446100445015563
+--- !u!135 &8324228109527574896
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -192,5 +208,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
-  m_Center: {x: 0, y: 0, z: 1.44}
+  m_Radius: 0.41218352
+  m_Center: {x: -0.00000014901161, y: -0.00000037941717, z: 0.570199}

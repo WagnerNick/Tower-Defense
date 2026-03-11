@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
 
     [HideInInspector] public int target;
     [HideInInspector] public float pathProgress;
+    [HideInInspector] public Vector2Int currentCell;
 
     private Vector3 lastPos;
 
@@ -44,6 +45,7 @@ public class Enemy : MonoBehaviour
             {
                 target++;
             }
+            EnemyGrid.Instance.UpdateEnemy(this);
         }
         else
         {

@@ -915,7 +915,7 @@ Transform:
   m_GameObject: {fileID: 3347207080019235331}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.0112499995, z: 0.005}
+  m_LocalPosition: {x: 0, y: 0.01568, z: 0.005}
   m_LocalScale: {x: 0.025, y: 0.025, z: 0.025}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2193,9 +2193,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Tower
   rotationPoint: {fileID: 1295458047660113732}
   firePoint: {fileID: 8359360278544550129}
+  target: {fileID: 0}
   range: 15
   fireRate: 1
-  turnSpeed: 10
   targetMode: 0
 --- !u!1 &7864301164756259798
 GameObject:
