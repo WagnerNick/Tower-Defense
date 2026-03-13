@@ -55,6 +55,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         currentHealth = type.health;
 
         enemy.speed = type.speed;
+        enemy.damage = type.damage;
 
         if (balloonRenderer != null)
         {

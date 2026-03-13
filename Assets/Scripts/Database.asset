@@ -13,15 +13,13 @@ MonoBehaviour:
   m_Name: Database
   m_EditorClassIdentifier: Assembly-CSharp::TowerDatabaseSO
   objectData:
-  - <Name>k__BackingField: Power
-    <ID>k__BackingField: 0
-    <Size>k__BackingField: {x: 2, y: 2}
-    <Prefab>k__BackingField: {fileID: 4531298253829446797, guid: 140deb5355b28be4bab18bc2ffd97179, type: 3}
   - <Name>k__BackingField: Standard Tower
     <ID>k__BackingField: 1
+    <Cost>k__BackingField: 200
     <Size>k__BackingField: {x: 1, y: 1}
     <Prefab>k__BackingField: {fileID: 7771536825423143536, guid: 408747b894ee88c43b01da4c9148b6b6, type: 3}
   - <Name>k__BackingField: Big Tower
     <ID>k__BackingField: 2
+    <Cost>k__BackingField: 400
     <Size>k__BackingField: {x: 2, y: 1}
     <Prefab>k__BackingField: {fileID: 5352641279969013998, guid: 24243f526d2a7094395b18394da62370, type: 3}

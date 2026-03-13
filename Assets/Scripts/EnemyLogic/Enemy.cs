@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public PathDataSO path;
     public Transform center;
     public float speed = 1f;
+    public float damage = 1f;
 
     [HideInInspector] public int target;
     [HideInInspector] public float pathProgress;
@@ -50,6 +51,7 @@ public class Enemy : MonoBehaviour
         else
         {
             EnemyPool.Instance.ReturnToPool(this);
+            PlayerHealth.Instance.Damage(damage);
         }
     }
 }

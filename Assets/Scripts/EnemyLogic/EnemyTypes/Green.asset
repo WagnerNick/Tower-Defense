@@ -16,5 +16,6 @@ MonoBehaviour:
   color: {r: 0, g: 1, b: 0.11118245, a: 1}
   health: 1
   speed: 1.8
+  damage: 3
   scale: 1
   popsInto: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}

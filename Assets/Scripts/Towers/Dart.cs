@@ -64,7 +64,6 @@ public class Dart : MonoBehaviour
         {
             damageable.Damage(1);
         }
-        //EnemyPool.Instance.ReturnToPool(enemy);
 
         currentPierce--;
 

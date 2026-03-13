@@ -2194,7 +2194,7 @@ MonoBehaviour:
   rotationPoint: {fileID: 1295458047660113732}
   firePoint: {fileID: 8359360278544550129}
   target: {fileID: 0}
-  range: 15
+  range: 2.5
   fireRate: 1
   targetMode: 0
 --- !u!1 &7864301164756259798
