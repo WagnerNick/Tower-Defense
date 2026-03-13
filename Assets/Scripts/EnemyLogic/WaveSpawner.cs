@@ -10,6 +10,7 @@ public class WaveSpawner : MonoBehaviour
     {
         if (!spawning && EnemyManager.Instance.Enemies.Count == 0)
         {
+            PlayerMoney.Instance.ChangeMoney(100, true);
             StartCoroutine(SpawnWave());
         }
     }

@@ -5,26 +5,31 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 {
     public static PlayerHealth Instance;
 
-    [SerializeField] private TMP_Text hp;
-    [SerializeField] private int maxHealth;
-    [SerializeField] private int currentHealth;
+    [SerializeField] private TMP_Text hpTxt;
+    [SerializeField] private int startHealth;
+    [SerializeField] private int health;
 
     private void Awake()
     {
         Instance = this;
-        currentHealth = maxHealth;
-        hp.text = currentHealth.ToString();
+        health = startHealth;
+        hpTxt.text = health.ToString();
     }
 
     public void Damage(float damageAmount)
     {
-        currentHealth -= Mathf.RoundToInt(damageAmount);
-        hp.text = currentHealth.ToString();
+        health -= Mathf.RoundToInt(damageAmount);
+        hpTxt.text = health.ToString();
+
+        if (health <= 0)
+        {
+            GameManager.Instance.EndGame();
+        }
     }
 
     public void Heal(float healAmount)
     {
-        currentHealth += Mathf.RoundToInt(healAmount);
-        hp.text = currentHealth.ToString();
+        health += Mathf.RoundToInt(healAmount);
+        hpTxt.text = health.ToString();
     }
 }

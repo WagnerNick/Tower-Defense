@@ -165,9 +165,9 @@ public class Tower : MonoBehaviour
                     }
                     break;
                 case TargetMode.Strong:
-                    if (bestEnemy == null || enemy.speed > bestValue)
+                    if (bestEnemy == null || enemy.damage > bestValue)
                     {
-                        bestValue = enemy.speed;
+                        bestValue = enemy.damage;
                         bestEnemy = enemy;
                     }
                     break;

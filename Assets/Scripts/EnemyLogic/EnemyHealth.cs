@@ -25,6 +25,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public void Damage(float damageAmount)
     {
         currentHealth -= Mathf.RoundToInt(damageAmount);
+        PlayerMoney.Instance.ChangeMoney(1, true);
 
         if (currentHealth <= 0)
         {

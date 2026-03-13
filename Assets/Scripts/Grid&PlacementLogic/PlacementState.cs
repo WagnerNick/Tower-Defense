@@ -48,6 +48,8 @@ public class PlacementState : IBuildingState
         if (canPlace == false)
             return;
 
+        PlayerMoney.Instance.ChangeMoney(database.objectData[selectedObjectIndex].Cost, false);
+
         int index = objectPlacer.PlaceObject(database.objectData[selectedObjectIndex].Prefab, grid.CellToWorld(gridPos));
 
         GridData selectedData = database.objectData[selectedObjectIndex].ID == 0 ? powerData : towerData;
@@ -60,6 +62,8 @@ public class PlacementState : IBuildingState
     {
         Vector2Int size = database.objectData[selectedObjectIndex].Size;
         GridData selectedData = database.objectData[selectedObjectIndex].ID == 0 ? powerData : towerData;
+        if (PlayerMoney.Instance.money < database.objectData[selectedObjectIndex].Cost)
+            return false;
         if (!selectedData.CanPlaceObjectAt(gridPos, size))
             return false;
 
