@@ -40,17 +40,28 @@ public class PreviewSystem : MonoBehaviour
     {
         MonoBehaviour[] behaviours = previewObject.GetComponents<MonoBehaviour>();
         foreach (MonoBehaviour behaviour in behaviours)
+        {
+            if (behaviour is TowerRangeDisplay)
+                continue;
             behaviour.enabled = false;
+        }
 
         Renderer[] renderers = previewObject.GetComponentsInChildren<Renderer>();
         foreach (Renderer renderer in renderers)
         {
+            if (renderer is LineRenderer)
+                continue;
             Material[] materials = renderer.materials;
             for (int i = 0; i < materials.Length; i++)
             {
                 materials[i] = previewMaterialsInstance;
             }
             renderer.materials = materials;
+        }
+        TowerRangeDisplay rangeDisplay = previewObject.GetComponent<TowerRangeDisplay>();
+        if (rangeDisplay != null)
+        {
+            rangeDisplay.SetVisible(true);
         }
     }
 
