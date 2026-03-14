@@ -1,32 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.AnimationUtility;
 using Random = UnityEngine.Random;
 
-public enum TargetMode
-{
-    First,
-    Last,
-    Close,
-    Strong
-}
+public enum TargetMode { First, Last, Close, Strong }
 
 public class Tower : MonoBehaviour
 {
+    [SerializeField] private TowerDataSO data;
     [SerializeField] private Transform rotationPoint;
     [SerializeField] private Transform firePoint;
 
-    public Transform target;
+    public Transform RotationPoint => rotationPoint;
+    public Transform FirePoint => firePoint;
+    public float Range => data.range;
+    public Transform Target { get; private set; }
 
-    [Header("Attributes")]
-    public float range = 15f;
-    public float fireRate = 1f;
     private float fireCountdown;
-
-    public TargetMode targetMode;
 
     private void Start()
     {
-        fireCountdown = Random.Range(0f, 1f / fireRate);
+        fireCountdown = Random.Range(0f, 1f / data.fireRate);
         InvokeRepeating("UpdateTarget", 0f, 0.25f);
     }
 
@@ -34,64 +28,72 @@ public class Tower : MonoBehaviour
     {
         fireCountdown -= Time.deltaTime;
 
-        if (fireCountdown <= 0f)
+        if (fireCountdown <= 0f && Target != null && Target.gameObject.activeInHierarchy)
         {
-            if (target != null)
-            {
-                Shoot();
-                fireCountdown = 1f / fireRate;
-            }
+            data.attack.Attack(this);
+            fireCountdown = 1f / data.fireRate;
         }
     }
 
     void UpdateTarget()
     {
         var enemies = EnemyGrid.Instance.GetNearbyEnemies(transform.position);
-        target = GetTarget(enemies);
+        Target = GetTarget(enemies);
     }
 
-    private void Shoot()
+    Transform GetTarget(List<Enemy> enemies)
     {
-        if (target == null || !target.gameObject.activeInHierarchy)
+        Enemy bestEnemy = null;
+        float bestValue = 0f;
+
+        foreach (Enemy enemy in enemies)
         {
-            target = null;
-            return;
+            float dist = Vector3.Distance(firePoint.position, enemy.center.position);
+            if (dist > data.range)
+                continue;
+
+            switch (data.targetMode)
+            {
+                case TargetMode.First:
+                    if (enemy.pathProgress > bestValue)
+                    {
+                        bestValue = enemy.pathProgress;
+                        bestEnemy = enemy;
+                    }
+                    break;
+                case TargetMode.Last:
+                    if (bestEnemy == null || enemy.pathProgress < bestValue)
+                    {
+                        bestValue = enemy.pathProgress;
+                        bestEnemy = enemy;
+                    }
+                    break;
+                case TargetMode.Close:
+                    if (bestEnemy == null || dist < bestValue)
+                    {
+                        bestValue = dist;
+                        bestEnemy = enemy;
+                    }
+                    break;
+                case TargetMode.Strong:
+                    if (bestEnemy == null || enemy.damage > bestValue)
+                    {
+                        bestValue = enemy.damage;
+                        bestEnemy = enemy;
+                    }
+                    break;
+            }
         }
-
-        Enemy enemy = target.GetComponentInParent<Enemy>();
-
-        if (enemy == null || enemy.center == null)
-        {
-            target = null;
-            return;
-        }
-
-        Dart dart = DartPool.Instance.Get();
-        float projectileSpeed = dart.speed;
-
-        Vector3 aimPoint = PredictEnemyPosition(enemy, firePoint.position, projectileSpeed);
-
-        Vector3 dir = aimPoint - firePoint.position;
-        dir.y = 0f;
-        dir.Normalize();
-
-        rotationPoint.rotation = Quaternion.LookRotation(dir);
-
-        dart.transform.SetPositionAndRotation(firePoint.position, Quaternion.LookRotation(dir));
-        dart.Fire(dir);
-        dart.gameObject.SetActive(true);
-        Debug.DrawLine(firePoint.position, aimPoint, Color.red, 1f);
+        return bestEnemy != null ? bestEnemy.center : null;
     }
 
-    Vector3 PredictEnemyPosition(Enemy enemy, Vector3 firePos, float projectileSpeed)
+    public Vector3 PredictEnemyPosition(Enemy enemy, Vector3 firePos, float projectileSpeed)
     {
         Vector3 predicted = enemy.center.position;
-
         for (int i = 0; i < 5; i++)
         {
             float dist = Vector3.Distance(firePos, predicted);
             float travelTime = dist / projectileSpeed;
-
             predicted = PredictPathPosition(enemy, enemy.speed * travelTime);
         }
         return predicted;
@@ -129,56 +131,9 @@ public class Tower : MonoBehaviour
         return endPos;
     }
 
-    Transform GetTarget(List<Enemy> enemies)
-    {
-        Enemy bestEnemy = null;
-        float bestValue = 0f;
-
-        foreach (Enemy enemy in enemies)
-        {
-            float dist = Vector3.Distance(firePoint.position, enemy.center.position);
-
-            if (dist > range)
-                continue;
-
-            switch (targetMode)
-            {
-                case TargetMode.First:
-                    if (enemy.pathProgress > bestValue)
-                    {
-                        bestValue = enemy.pathProgress;
-                        bestEnemy = enemy;
-                    }
-                    break;
-                case TargetMode.Last:
-                    if (bestEnemy == null || enemy.pathProgress < bestValue)
-                    {
-                        bestValue = enemy.pathProgress;
-                        bestEnemy = enemy;
-                    }
-                    break;
-                case TargetMode.Close:
-                    if (bestEnemy == null || dist < bestValue)
-                    {
-                        bestValue = dist;
-                        bestEnemy = enemy;
-                    }
-                    break;
-                case TargetMode.Strong:
-                    if (bestEnemy == null || enemy.damage > bestValue)
-                    {
-                        bestValue = enemy.damage;
-                        bestEnemy = enemy;
-                    }
-                    break;
-            }
-        }
-        return bestEnemy != null ? bestEnemy.center.transform : null;
-    }
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(rotationPoint.position, range);
+        Gizmos.DrawWireSphere(rotationPoint.position, data != null ? data.range : 1f);
     }
 }

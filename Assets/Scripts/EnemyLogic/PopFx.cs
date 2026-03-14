@@ -1,7 +1,6 @@
-using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PopFx : MonoBehaviour
 {
@@ -14,6 +13,7 @@ public class PopFx : MonoBehaviour
 
     private void OnEnable()
     {
+        transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
         StartCoroutine(WaitForAnimation());
     }
 

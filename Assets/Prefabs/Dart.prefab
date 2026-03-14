@@ -104,5 +104,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dart
   speed: 50
-  maxPierce: 2
   hitRadius: 0.5
+  damage: 1

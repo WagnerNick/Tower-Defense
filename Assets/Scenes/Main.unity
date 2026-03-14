@@ -2289,7 +2289,7 @@ GameObject:
   - component: {fileID: 753549765}
   - component: {fileID: 753549764}
   m_Layer: 0
-  m_Name: DartPool
+  m_Name: ProjectilePool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2307,7 +2307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c5e8b69ac1d26a44ba67cd5830d75cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DartPool
-  dartPrefab: {fileID: 2372397779542867521, guid: 1ec845a58759fad4ab3ef3d04fae9101, type: 3}
+  projectilePrefab: {fileID: 2372397779542867521, guid: 1ec845a58759fad4ab3ef3d04fae9101, type: 3}
 --- !u!4 &753549765
 Transform:
   m_ObjectHideFlags: 0

@@ -2303,12 +2303,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e50b3f6c8d295f48a3f49552712be08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tower
+  data: {fileID: 11400000, guid: 4b4ef8966c556934f9424f6b86297657, type: 2}
   rotationPoint: {fileID: 1295458047660113732}
   firePoint: {fileID: 8359360278544550129}
-  target: {fileID: 0}
-  range: 2.5
-  fireRate: 1
-  targetMode: 0
 --- !u!114 &4371968485324962757
 MonoBehaviour:
   m_ObjectHideFlags: 0

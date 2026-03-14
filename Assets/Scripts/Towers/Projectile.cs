@@ -1,25 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dart : MonoBehaviour
+public class Projectile : MonoBehaviour
 {
-    public float speed = 70f;
-    public int maxPierce = 2;
-    private int currentPierce = 0;
-    public float hitRadius = 0.3f;
+    public float speed;
+    private int currentPierce;
+    public float hitRadius;
+    public int damage;
 
     private Vector3 direction;
-    private Vector3 lastPosition;
-
     private List<Enemy> hitEnemies = new List<Enemy>();
 
-    public void Fire(Vector3 dir)
+    public void Setup(Vector3 dir, float speed, int pierce, float hitRadius, int damage)
     {
+        this.speed = speed;
+        this.hitRadius = hitRadius;
+        this.damage = damage;
+        currentPierce = pierce;
         direction = dir.normalized;
         transform.forward = direction;
-        currentPierce = maxPierce;
         hitEnemies.Clear();
-        lastPosition = transform.position;
     }
 
     private void Update()
@@ -28,24 +28,17 @@ public class Dart : MonoBehaviour
         newPos.y = transform.position.y;
         CheckHits(transform.position, newPos);
         transform.position = newPos;
-        lastPosition = newPos;
 
         if (IsOutsideCameraView())
-            DartPool.Instance.ReturnToPool(this);
+            ProjectilePool.Instance.ReturnToPool(this);
     }
 
     void CheckHits(Vector3 start, Vector3 end)
     {
-        var enemies = EnemyGrid.Instance.GetNearbyEnemies(transform.position);
-
-        foreach (Enemy enemy in enemies)
+        foreach (Enemy enemy in EnemyGrid.Instance.GetNearbyEnemies(transform.position))
         {
-            if (hitEnemies.Contains(enemy))
-                continue;
-
-            float dist = DistancePointToSegment(enemy.center.position, start, end);
-
-            if (dist <= hitRadius)
+            if (hitEnemies.Contains(enemy)) continue;
+            if (DistancePointToSegment(enemy.center.position, start, end) <= hitRadius)
                 HitEnemy(enemy);
         }
     }
@@ -55,20 +48,14 @@ public class Dart : MonoBehaviour
         hitEnemies.Add(enemy);
 
         PopFx popFx = PopPool.Instance.Get();
-
         popFx.transform.SetPositionAndRotation(transform.position, popFx.transform.rotation);
         popFx.gameObject.SetActive(true);
 
-        IDamageable damageable = enemy.GetComponentInParent<IDamageable>();
-        if (damageable != null)
-        {
-            damageable.Damage(1);
-        }
+        enemy.GetComponentInParent<IDamageable>()?.Damage(damage);
 
         currentPierce--;
-
         if (currentPierce <= 0)
-            DartPool.Instance.ReturnToPool(this);
+            ProjectilePool.Instance.ReturnToPool(this);
     }
 
     bool IsOutsideCameraView()
@@ -80,11 +67,7 @@ public class Dart : MonoBehaviour
     float DistancePointToSegment(Vector3 point, Vector3 a, Vector3 b)
     {
         Vector3 ab = b - a;
-
-        float t = Vector3.Dot(point - a, ab) / Vector3.Dot(ab, ab);
-        t = Mathf.Clamp01(t);
-
-        Vector3 closest = a + t * ab;
-        return Vector3.Distance(point, closest);
+        float t = Mathf.Clamp01(Vector3.Dot(point - a, ab) / Vector3.Dot(ab, ab));
+        return Vector3.Distance(point, a + t * ab);
     }
 }

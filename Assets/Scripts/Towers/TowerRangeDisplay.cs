@@ -28,7 +28,7 @@ public class TowerRangeDisplay : MonoBehaviour
 
     private void Update()
     {
-        if (tower != null && !Mathf.Approximately(tower.range, lastRange))
+        if (tower != null && !Mathf.Approximately(tower.Range, lastRange))
             DrawCircle();
     }
 
@@ -40,7 +40,7 @@ public class TowerRangeDisplay : MonoBehaviour
 
     private void DrawCircle()
     {
-        float range = tower != null ? tower.range : lastRange;
+        float range = tower != null ? tower.Range : lastRange;
         if (range <= 0f) return;
 
         lastRange = range;

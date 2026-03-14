@@ -24,12 +24,13 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public void Damage(float damageAmount)
     {
+        float overflow = damageAmount - currentHealth;
         currentHealth -= Mathf.RoundToInt(damageAmount);
         PlayerMoney.Instance.ChangeMoney(1, true);
 
         if (currentHealth <= 0)
         {
-            Pop();
+            Pop(overflow);
         }
     }
 
@@ -38,11 +39,13 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         currentHealth = Mathf.Min(currentHealth + Mathf.RoundToInt(healAmount), currentType.health);
     }
 
-    void Pop()
+    void Pop(float overflowDamage)
     {
         if (currentType.popsInto != null)
         {
             ApplyType(currentType.popsInto);
+            if (overflowDamage > 0)
+                Damage(overflowDamage);
         }
         else
         {
