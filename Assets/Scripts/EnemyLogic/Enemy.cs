@@ -34,6 +34,10 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.gameIsEnded)
+        {
+            EnemyPool.Instance.ReturnToPool(this);
+        }
         if (target <= path.cell.Count - 1)
         {
             transform.position = Vector3.MoveTowards(transform.position, path.cell[target], speed * Time.deltaTime);

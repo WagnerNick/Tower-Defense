@@ -23,7 +23,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
         if (health <= 0)
         {
-            GameManager.Instance.EndGame();
+            GameManager.Instance.GameOver();
         }
     }
 
