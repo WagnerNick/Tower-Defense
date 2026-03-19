@@ -7,13 +7,11 @@ public class GameManager : MonoBehaviour
 
     public bool gameIsEnded = false;
 
-    public GameObject endScreenUI;
     public GameObject gameOverUI;
 
     private void Awake()
     {
         Instance = this;
-        endScreenUI.SetActive(false);
         gameOverUI.SetActive(false);
     }
 
@@ -27,20 +25,14 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void Menu()
+    public void MainMenu()
     {
 
-    }
-
-    private void EndGame()
-    {
-        gameIsEnded = true;
-        endScreenUI.SetActive(true);
     }
 
     public void GameOver()
     {
-        EndGame();
+        gameIsEnded = true;
         gameOverUI.SetActive(true);
     }
 }

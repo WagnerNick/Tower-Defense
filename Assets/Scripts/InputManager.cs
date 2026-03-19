@@ -12,6 +12,9 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Camera sceneCamera;
     public static PlayerInput input;
 
+    public static bool MenuWasPressed;
+
+    private InputAction menuAction;
     private InputAction clickAction;
     private InputAction cancelAction;
 
@@ -19,18 +22,23 @@ public class InputManager : MonoBehaviour
 
     private Vector3 lastPos;
 
-    void Awake() => Instance = this;
+    void Awake()
+    {
+        Instance = this;
+        input = GetComponent<PlayerInput>();
+
+        menuAction = input.actions["Menu"];
+    }
 
     private void Start()
     {
-        input = GetComponent<PlayerInput>();
-
         clickAction = input.actions["Click"];
         cancelAction = input.actions["Cancel"];
     }
 
     private void Update()
     {
+        MenuWasPressed = menuAction.WasPressedThisFrame();
         if (clickAction.WasPressedThisFrame())
             OnClick?.Invoke();
         if (cancelAction.WasPressedThisFrame())

@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PopPool : PersistentSingleton<PopPool>
+public class PopPool : MonoBehaviour
 {
+    public static PopPool Instance;
     [SerializeField] private PopFx popPrefab;
     private Queue<PopFx> pool = new();
+
+    void Awake() => Instance = this;
 
     public PopFx Get()
     {

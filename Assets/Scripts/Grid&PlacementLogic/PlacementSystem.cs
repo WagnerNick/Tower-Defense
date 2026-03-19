@@ -62,7 +62,7 @@ public class PlacementSystem : MonoBehaviour
         objectPlacer.RemoveObjectAt(index);
     }
 
-    private void StopPlacement()
+    public void StopPlacement()
     {
         if (buildingState == null)
             return;

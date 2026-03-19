@@ -25,6 +25,11 @@ public class TowerSelector : MonoBehaviour
     {
         if (InputManager.Instance.IsPointerOverUI()) return;
         if (PlacementSystem.Instance.isActive) return;
+        if (rangeDisplay != null)
+        {
+            rangeDisplay.SetVisible(false);
+            rangeDisplay = null;
+        }
 
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 
@@ -55,8 +60,6 @@ public class TowerSelector : MonoBehaviour
     {
         if (selectedTower == null) return;
         selectedTower = null;
-        rangeDisplay.SetVisible(false);
-        rangeDisplay = null;
         TowerUI.Instance.Hide();
     }
 }

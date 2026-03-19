@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectilePool : PersistentSingleton<ProjectilePool>
+public class ProjectilePool : MonoBehaviour
 {
+    public static ProjectilePool Instance;
+
     [SerializeField] private Projectile projectilePrefab;
     private Queue<Projectile> pool = new();
+
+    void Awake() => Instance = this;
 
     public Projectile Get()
     {

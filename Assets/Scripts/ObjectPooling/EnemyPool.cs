@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyPool : PersistentSingleton<EnemyPool>
+public class EnemyPool : MonoBehaviour
 {
+    public static EnemyPool Instance;
     [SerializeField] private Enemy enemyPrefab;
     private Queue<Enemy> pool = new();
+
+    void Awake() => Instance = this;
 
     public Enemy Get()
     {
