@@ -11,6 +11,9 @@ public class Tower : MonoBehaviour
     [SerializeField] private Transform rotationPoint;
     [SerializeField] private Transform firePoint;
 
+    public Vector3Int GridPosition { get; private set; }
+    public int PlacedObjectIndex { get; private set; }
+
     public Transform RotationPoint => rotationPoint;
     public Transform FirePoint => firePoint;
     public float Range => data.range;
@@ -33,6 +36,22 @@ public class Tower : MonoBehaviour
             data.attack.Attack(this);
             fireCountdown = 1f / data.fireRate;
         }
+    }
+
+    public void Init(Vector3Int gridPos, int index)
+    {
+        GridPosition = gridPos;
+        PlacedObjectIndex = index;
+    }
+
+    public void Upgrade()
+    {
+        Debug.Log("Tower Upgraded");
+    }
+
+    public void Sell()
+    {
+        PlacementSystem.Instance.RemoveObject(this);
     }
 
     void UpdateTarget()

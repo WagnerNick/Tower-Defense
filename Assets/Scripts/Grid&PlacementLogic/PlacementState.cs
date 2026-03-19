@@ -52,6 +52,11 @@ public class PlacementState : IBuildingState
 
         int index = objectPlacer.PlaceObject(database.objectData[selectedObjectIndex].Prefab, grid.CellToWorld(gridPos));
 
+        GameObject placedObj = objectPlacer.GetPlacedObject(index);
+        Tower tower = placedObj.GetComponent<Tower>();
+        if (tower != null)
+            tower.Init(gridPos, index);
+
         GridData selectedData = database.objectData[selectedObjectIndex].ID == 0 ? powerData : towerData;
         selectedData.AddObjectAt(gridPos, database.objectData[selectedObjectIndex].Size, database.objectData[selectedObjectIndex].ID, index);
 

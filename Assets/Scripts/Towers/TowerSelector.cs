@@ -4,61 +4,59 @@ using UnityEngine.InputSystem;
 
 public class TowerSelector : MonoBehaviour
 {
-    public static TowerSelector instance;
-    public Tower selectedTower;
+    public static TowerSelector Instance;
+    public Tower selectedTower { get; private set; }
+    public TowerRangeDisplay rangeDisplay { get; private set; }
     [SerializeField] private LayerMask towerLayer;
-    [SerializeField] private Camera sceneCamera;
 
-    void Awake() => instance = this;
+    void Awake() => Instance = this;
 
-    void OnEnable()
+    void Start()
     {
         InputManager.Instance.OnClick += HandleClick;
     }
 
-    void OnDisable()
+    void OnDestroy()
     {
         InputManager.Instance.OnClick -= HandleClick;
     }
 
     void HandleClick()
     {
-        //if (PlacementSystem.Instance.IsPlacing) return;
         if (InputManager.Instance.IsPointerOverUI()) return;
+        if (PlacementSystem.Instance.isActive) return;
 
-        Ray ray = sceneCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, towerLayer))
         {
             Tower tower = hit.collider.gameObject.GetComponentInParent<Tower>();
+            rangeDisplay = hit.collider.gameObject.GetComponentInParent<TowerRangeDisplay>();
             if (tower != null)
             {
                 if (tower == selectedTower)
                     Deselect();
                 else
-                    SelectTower(tower);
+                    Select(tower);
                 return;
             }
         }
         Deselect();
     }
 
-    public void SelectTower(Tower tower)
+    public void Select(Tower tower)
     {
-        //if (selectedTower != null)
-        //    selectedTower.SetSelected(false);
         selectedTower = tower;
-        //tower.SetSelected(true);
-        TowerUI.instance.Show(tower);
+        rangeDisplay.SetVisible(true);
+        TowerUI.Instance.Show(tower);
     }
 
     public void Deselect()
     {
-        if (selectedTower != null)
-        {
-            //selectedTower.SetSelected(false);
-            selectedTower = null;
-        }
-        TowerUI.instance.Hide();
+        if (selectedTower == null) return;
+        selectedTower = null;
+        rangeDisplay.SetVisible(false);
+        rangeDisplay = null;
+        TowerUI.Instance.Hide();
     }
 }

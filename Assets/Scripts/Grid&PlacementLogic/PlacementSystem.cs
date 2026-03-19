@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlacementSystem : MonoBehaviour
 {
+    public static PlacementSystem Instance;
+
     [SerializeField] private Grid grid;
     [SerializeField] private PathDataSO pathData;
     [SerializeField] private ObjectDatabaseSO database;
@@ -16,6 +18,10 @@ public class PlacementSystem : MonoBehaviour
 
     IBuildingState buildingState;
 
+    public bool isActive => buildingState != null;
+
+    void Awake() => Instance = this;
+
     private void Start()
     {
         StopPlacement();
@@ -26,18 +32,10 @@ public class PlacementSystem : MonoBehaviour
 
     public void StartPlacement(int ID)
     {
+        TowerSelector.Instance.Deselect();
         StopPlacement();
         gridVisual.SetActive(true);
         buildingState = new PlacementState(ID, grid, preview, database, powerData, towerData, pathData, objectPlacer);
-        InputManager.Instance.OnClick += PlaceObject;
-        InputManager.Instance.OnCancel += StopPlacement;
-    }
-
-    public void StartRemoval()
-    {
-        StopPlacement();
-        gridVisual.SetActive(true);
-        buildingState = new RemovalState(grid, preview, powerData, towerData, objectPlacer);
         InputManager.Instance.OnClick += PlaceObject;
         InputManager.Instance.OnCancel += StopPlacement;
     }
@@ -50,6 +48,18 @@ public class PlacementSystem : MonoBehaviour
         Vector3Int gridPos = grid.WorldToCell(mousePos);
 
         buildingState.OnAction(gridPos);
+    }
+
+    public void RemoveObject(Tower tower)
+    {
+        Vector3Int gridPos = tower.GridPosition;
+        GridData selectedData = towerData;
+
+        int index = selectedData.GetRepIndex(gridPos);
+        if (index == -1)
+            return;
+        selectedData.RemoveObjectAt(gridPos);
+        objectPlacer.RemoveObjectAt(index);
     }
 
     private void StopPlacement()

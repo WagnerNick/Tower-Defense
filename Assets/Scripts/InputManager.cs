@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class InputManager : PersistentSingleton<InputManager>
+public class InputManager : MonoBehaviour
 {
+    public static InputManager Instance;
+
     [SerializeField] private LayerMask placementLayer;
     [SerializeField] private Camera sceneCamera;
     public static PlayerInput input;
@@ -16,6 +18,8 @@ public class InputManager : PersistentSingleton<InputManager>
     public event Action OnClick, OnCancel;
 
     private Vector3 lastPos;
+
+    void Awake() => Instance = this;
 
     private void Start()
     {
