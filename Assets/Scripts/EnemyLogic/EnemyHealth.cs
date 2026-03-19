@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
-    [SerializeField] private BalloonTypeSO initialType;
     [SerializeField] private MeshRenderer balloonRenderer;
 
+    private BalloonTypeSO initialType;
     private BalloonTypeSO currentType;
     private int currentHealth;
     private MaterialPropertyBlock propertyBlock;
@@ -19,7 +19,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private void OnEnable()
     {
-        ApplyType(initialType);
+        if (initialType != null)
+            ApplyType(initialType);
     }
 
     public void Damage(float damageAmount)
@@ -51,6 +52,11 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         {
             EnemyPool.Instance.ReturnToPool(enemy);
         }
+    }
+
+    public void SetInitialType(BalloonTypeSO type)
+    {
+        initialType = type;
     }
 
     void ApplyType(BalloonTypeSO type)

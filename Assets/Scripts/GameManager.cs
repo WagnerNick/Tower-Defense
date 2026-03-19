@@ -22,11 +22,13 @@ public class GameManager : MonoBehaviour
 
     public void Retry()
     {
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void MainMenu()
     {
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene(0);
     }
 
@@ -34,5 +36,10 @@ public class GameManager : MonoBehaviour
     {
         gameIsEnded = true;
         gameOverUI.SetActive(true);
+    }
+
+    public void Victory()
+    {
+        Debug.Log("You won");
     }
 }

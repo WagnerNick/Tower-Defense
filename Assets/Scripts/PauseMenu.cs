@@ -4,25 +4,27 @@ using UnityEngine;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenu;
-    void Update()
-    {
-        if (PlacementSystem.Instance != null)
-        { if (PlacementSystem.Instance.isActive) return; }
-        if (InputManager.MenuWasPressed)
-            Toggle();
 
+    private void Start()
+    {
+        InputManager.Instance.OnMenu += HandleMenu;
+    }
+
+    private void OnDestroy()
+    {
+        InputManager.Instance.OnMenu -= HandleMenu;
+    }
+
+    void HandleMenu()
+    {
+        if (PlacementSystem.Instance != null && PlacementSystem.Instance.isActive)
+            return;
+        Toggle();
     }
 
     public void Toggle()
     {
         pauseMenu.SetActive(!pauseMenu.activeSelf);
-        if (pauseMenu.activeSelf)
-        {
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
-        }
+        Time.timeScale = pauseMenu.activeSelf ? 0f : 1f;
     }
 }

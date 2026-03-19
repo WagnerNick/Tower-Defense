@@ -19,7 +19,6 @@ public class Enemy : MonoBehaviour
         transform.position = path.cell[0];
         target = 1;
         pathProgress = 0f;
-
         lastPos = transform.position;
 
         EnemyGrid.Instance.AddEnemy(this);

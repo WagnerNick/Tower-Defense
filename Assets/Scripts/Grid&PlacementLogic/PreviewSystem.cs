@@ -5,6 +5,7 @@ public class PreviewSystem : MonoBehaviour
     [SerializeField] private float previewYOffset = 0.06f;
 
     [SerializeField] private GameObject cellIndicator;
+    [SerializeField] private GameObject cancelBtn;
     private GameObject previewObject;
 
     [SerializeField] private Material previewMaterialsPrefab;
@@ -16,6 +17,7 @@ public class PreviewSystem : MonoBehaviour
     {
         previewMaterialsInstance = new Material(previewMaterialsPrefab);
         cellIndicator.SetActive(false);
+        cancelBtn.SetActive(false);
         cellIndicatorRender = cellIndicator.GetComponentInChildren<Renderer>();
     }
 
@@ -25,6 +27,7 @@ public class PreviewSystem : MonoBehaviour
         PreparePreview(previewObject);
         PrepareCursor(size);
         cellIndicator.SetActive(true);
+        cancelBtn.SetActive(true);
     }
 
     private void PrepareCursor(Vector2Int size)
@@ -68,6 +71,7 @@ public class PreviewSystem : MonoBehaviour
     public void StopPreview()
     {
         cellIndicator.SetActive(false);
+        cancelBtn.SetActive(false);
         if (previewObject != null)
             Destroy(previewObject);
     }
