@@ -6,11 +6,11 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenu;
     void Update()
     {
-        if (PlacementSystem.Instance.isActive) return;
+        if (PlacementSystem.Instance != null)
+        { if (PlacementSystem.Instance.isActive) return; }
         if (InputManager.MenuWasPressed)
-        {
             Toggle();
-        }
+
     }
 
     public void Toggle()
