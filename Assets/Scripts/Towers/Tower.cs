@@ -10,19 +10,25 @@ public class Tower : MonoBehaviour
     [SerializeField] private TowerDataSO data;
     [SerializeField] private Transform rotationPoint;
     [SerializeField] private Transform firePoint;
+    [SerializeField] private ParticleSystem fireAnim;
 
     public Vector3Int GridPosition { get; private set; }
     public int PlacedObjectIndex { get; private set; }
 
     public Transform RotationPoint => rotationPoint;
     public Transform FirePoint => firePoint;
+    public ParticleSystem FireAnim => fireAnim;
     public float Range => data.range;
+    public TargetMode TargetMode => data.targetMode;
     public Transform Target { get; private set; }
 
     private float fireCountdown;
+    private bool isInfiniteRange;
 
     private void Start()
     {
+        isInfiniteRange = data.attack is IInfiniteRange;
+
         fireCountdown = Random.Range(0f, 1f / data.fireRate);
         InvokeRepeating("UpdateTarget", 0f, 0.25f);
     }
@@ -31,10 +37,14 @@ public class Tower : MonoBehaviour
     {
         fireCountdown -= Time.deltaTime;
 
-        if (fireCountdown <= 0f && Target != null && Target.gameObject.activeInHierarchy)
+        if (fireCountdown <= 0f)
         {
-            data.attack.Attack(this);
-            fireCountdown = 1f / data.fireRate;
+            bool canFire = isInfiniteRange || (Target != null && Target.gameObject.activeInHierarchy);
+            if (canFire)
+            {
+                data.attack.Attack(this);
+                fireCountdown = 1f / data.fireRate;
+            }
         }
     }
 
@@ -52,6 +62,7 @@ public class Tower : MonoBehaviour
     public void Sell()
     {
         PlacementSystem.Instance.RemoveObject(this);
+        PlayerMoney.Instance.ChangeMoney(data.cost * 3 / 4, true);
     }
 
     void UpdateTarget()

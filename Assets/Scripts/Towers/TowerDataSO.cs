@@ -5,7 +5,7 @@ public class TowerDataSO : ScriptableObject
 {
     [Header("Identity")]
     public string towerName;
-    public string cost;
+    public int cost;
 
     [Header("Stats")]
     public float range = 15f;

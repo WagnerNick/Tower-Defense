@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Database
   m_EditorClassIdentifier: Assembly-CSharp::TowerDatabaseSO
   objectData:
-  - <Name>k__BackingField: Standard Tower
+  - <Name>k__BackingField: Dart Monkey
     <ID>k__BackingField: 1
     <Cost>k__BackingField: 200
     <Size>k__BackingField: {x: 1, y: 1}
     <Prefab>k__BackingField: {fileID: 7771536825423143536, guid: 408747b894ee88c43b01da4c9148b6b6, type: 3}
-  - <Name>k__BackingField: Big Tower
+  - <Name>k__BackingField: Sniper Monkey
     <ID>k__BackingField: 2
-    <Cost>k__BackingField: 400
-    <Size>k__BackingField: {x: 2, y: 1}
-    <Prefab>k__BackingField: {fileID: 5352641279969013998, guid: 24243f526d2a7094395b18394da62370, type: 3}
+    <Cost>k__BackingField: 300
+    <Size>k__BackingField: {x: 1, y: 1}
+    <Prefab>k__BackingField: {fileID: 6902639931179727427, guid: 6b2d7a90568e19a49b0ab0e13e927414, type: 3}
