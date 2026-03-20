@@ -9,16 +9,25 @@ public class PlayerMoney : MonoBehaviour
     [SerializeField] private int startMoney = 650;
     public int money;
 
-    private void Awake()
+    private void Awake() => Instance = this;
+
+    private void Start()
     {
-        Instance = this;
-        money = startMoney;
+        if (SaveManager.Instance != null && SaveManager.Instance.HasSave())
+        {
+            SaveData data = SaveManager.Instance.Load();
+            money = data.money;
+        }
+        else
+        {
+            money = startMoney;
+        }
         moneyTxt.text = money.ToString();
     }
 
     public void ChangeMoney(int changeAmount, bool add)
     {
-        money = add ? money += changeAmount : money -= changeAmount;
+        money = add ? money + changeAmount : money - changeAmount;
         moneyTxt.text = money.ToString();
     }
 }

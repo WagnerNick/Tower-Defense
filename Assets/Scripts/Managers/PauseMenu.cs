@@ -19,6 +19,8 @@ public class PauseMenu : MonoBehaviour
     {
         if (PlacementSystem.Instance != null && PlacementSystem.Instance.isActive)
             return;
+        if (InputManager.Instance != null && InputManager.Instance.menuOpen)
+            return;
         Toggle();
     }
 

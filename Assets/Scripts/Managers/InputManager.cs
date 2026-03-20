@@ -11,6 +11,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private LayerMask placementLayer;
     [SerializeField] private Camera sceneCamera;
     public static PlayerInput input;
+    public bool menuOpen = false;
 
     private InputAction menuAction;
     private InputAction clickAction;

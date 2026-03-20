@@ -12,6 +12,15 @@ public class WaveSpawner : MonoBehaviour
     private int waveIndex = 0;
     private bool spawning = false;
 
+    private void Start()
+    {
+        if (SaveManager.Instance.HasSave())
+        {
+            SaveData data = SaveManager.Instance.Load();
+            waveIndex = data.waveIndex;
+        }
+    }
+
     private void Update()
     {
         if (spawning || GameManager.Instance.gameIsEnded) return;
@@ -22,6 +31,7 @@ public class WaveSpawner : MonoBehaviour
         {
             if (waveIndex >= waveData.waves.Count)
             {
+                SaveManager.Instance.DeleteSave();
                 GameManager.Instance.Victory();
                 return;
             }
@@ -41,7 +51,15 @@ public class WaveSpawner : MonoBehaviour
         yield return new WaitForSeconds(GetWaveDuration(wave) + 0.1f);
         yield return new WaitUntil(() => EnemyManager.Instance.Enemies.Count == 0);
 
+        if (GameManager.Instance.gameIsEnded)
+        {
+            spawning = false;
+            yield break;
+        }
+
         PlayerMoney.Instance.ChangeMoney(100 + waveIndex, true);
+        SaveManager.Instance.Save(waveIndex);
+
         spawning = false;
     }
 

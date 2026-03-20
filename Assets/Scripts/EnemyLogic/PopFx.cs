@@ -15,6 +15,7 @@ public class PopFx : MonoBehaviour
     {
         transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
         StartCoroutine(WaitForAnimation());
+        SFXManager.Play("Pop");
     }
 
     private IEnumerator WaitForAnimation()

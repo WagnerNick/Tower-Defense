@@ -9,10 +9,21 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     [SerializeField] private int startHealth;
     [SerializeField] private int health;
 
-    private void Awake()
+    public int CurrentHealth => health;
+
+    private void Awake() => Instance = this;
+
+    private void Start()
     {
-        Instance = this;
-        health = startHealth;
+        if (SaveManager.Instance != null && SaveManager.Instance.HasSave())
+        {
+            SaveData data = SaveManager.Instance.Load();
+            health = data.health;
+        }
+        else
+        {
+            health = startHealth;
+        }
         hpTxt.text = health.ToString();
     }
 
@@ -23,6 +34,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
         if (health <= 0)
         {
+            hpTxt.text = "0";
             GameManager.Instance.GameOver();
         }
     }

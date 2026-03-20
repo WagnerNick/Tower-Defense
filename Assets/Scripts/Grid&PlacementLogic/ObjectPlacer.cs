@@ -6,6 +6,8 @@ public class ObjectPlacer : MonoBehaviour
 {
     private List<GameObject> placedObjects = new();
 
+    public int PlacedCount => placedObjects.Count;
+
     public int PlaceObject(GameObject prefab, Vector3 pos)
     {
         GameObject newObject = Instantiate(prefab);
