@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class TowerUI : MonoBehaviour
     [SerializeField] private GameObject panel;
     [SerializeField] private TMP_Text upgradeLabel;
     [SerializeField] private GameObject upgradeButton;
+    [SerializeField] private TMP_Dropdown targetDropdown;
 
     public Tower CurrentTower { get; private set; }
 
@@ -15,6 +17,13 @@ public class TowerUI : MonoBehaviour
     {
         Instance = this;
         panel.SetActive(false);
+
+        targetDropdown.ClearOptions();
+        targetDropdown.AddOptions(new List<string>
+        {
+            "First", "Last", "Close", "Strong"
+        });
+        targetDropdown.onValueChanged.AddListener(OnTargetModeChanged);
     }
 
     public void Show(Tower tower)
@@ -22,6 +31,8 @@ public class TowerUI : MonoBehaviour
         CurrentTower = tower;
         panel.SetActive(true);
         RefreshUpgradeLabel();
+
+        targetDropdown.SetValueWithoutNotify((int)tower.TargetMode);
     }
 
     public void Hide()
@@ -51,6 +62,11 @@ public class TowerUI : MonoBehaviour
             upgradeLabel.text = "Fully Upgraded";
             upgradeButton.SetActive(false);
         }
+    }
+
+    void OnTargetModeChanged(int index)
+    {
+        CurrentTower?.SetTargetMode((TargetMode)index);
     }
 
     public void UpgradeButton()

@@ -39,3 +39,133 @@ MonoBehaviour:
       count: 10
       startDelay: 21
       interval: 1
+  - label: Wave 4
+    groups:
+    - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
+      count: 20
+      startDelay: 0
+      interval: 1
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 10
+      startDelay: 21
+      interval: 0.8
+    - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
+      count: 15
+      startDelay: 30
+      interval: 1
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 8
+      startDelay: 46
+      interval: 0.8
+  - label: Wave 5
+    groups:
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 12
+      startDelay: 0
+      interval: 0.8
+    - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
+      count: 5
+      startDelay: 11
+      interval: 1
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 15
+      startDelay: 17
+      interval: 0.8
+  - label: Wave 6
+    groups:
+    - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
+      count: 15
+      startDelay: 0
+      interval: 1
+    - balloonType: {fileID: 11400000, guid: 7b60345ab914e2b4189c6218a7bcc8c6, type: 2}
+      count: 4
+      startDelay: 16
+      interval: 0.6
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 15
+      startDelay: 19
+      interval: 0.8
+  - label: Wave 7
+    groups:
+    - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
+      count: 10
+      startDelay: 0
+      interval: 1
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 10
+      startDelay: 11
+      interval: 0.8
+    - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
+      count: 10
+      startDelay: 20
+      interval: 1
+    - balloonType: {fileID: 11400000, guid: 7b60345ab914e2b4189c6218a7bcc8c6, type: 2}
+      count: 5
+      startDelay: 31
+      interval: 0.6
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 10
+      startDelay: 35
+      interval: 0.8
+  - label: Wave 8
+    groups:
+    - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
+      count: 10
+      startDelay: 0
+      interval: 1
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 10
+      startDelay: 11
+      interval: 0.8
+    - balloonType: {fileID: 11400000, guid: 7b60345ab914e2b4189c6218a7bcc8c6, type: 2}
+      count: 14
+      startDelay: 20
+      interval: 0.6
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 10
+      startDelay: 29
+      interval: 0.8
+  - label: Wave 9
+    groups:
+    - balloonType: {fileID: 11400000, guid: 7b60345ab914e2b4189c6218a7bcc8c6, type: 2}
+      count: 30
+      startDelay: 0
+      interval: 0.6
+  - label: Wave 10
+    groups:
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 102
+      startDelay: 0
+      interval: 0.8
+  - label: Wave 11
+    groups:
+    - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
+      count: 10
+      startDelay: 0
+      interval: 1
+    - balloonType: {fileID: 11400000, guid: 7b60345ab914e2b4189c6218a7bcc8c6, type: 2}
+      count: 12
+      startDelay: 11
+      interval: 0.6
+    - balloonType: {fileID: 11400000, guid: d52b49c463a9a9d4cbc372c051d3f4a8, type: 2}
+      count: 3
+      startDelay: 19
+      interval: 0.4
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 10
+      startDelay: 21
+      interval: 0.4
+  - label: Wave 12
+    groups:
+    - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+      count: 15
+      startDelay: 0
+      interval: 0.8
+    - balloonType: {fileID: 11400000, guid: 7b60345ab914e2b4189c6218a7bcc8c6, type: 2}
+      count: 10
+      startDelay: 13
+      interval: 0.6
+    - balloonType: {fileID: 11400000, guid: d52b49c463a9a9d4cbc372c051d3f4a8, type: 2}
+      count: 5
+      startDelay: 20
+      interval: 0.4

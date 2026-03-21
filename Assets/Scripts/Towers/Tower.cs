@@ -18,21 +18,24 @@ public class Tower : MonoBehaviour
     public Transform FirePoint => firePoint;
     public ParticleSystem FireAnim => fireAnim;
     public Transform Target { get; private set; }
-    public TargetMode TargetMode => data.targetMode;
 
     public float Range { get; private set; }
     public float FireRate { get; private set; }
     public int RuntimeDamage { get; private set; }
     public int RuntimePierce { get; private set; }
     public float RuntimeProjSpeed { get; private set; }
+    private TargetMode runtimeTargetMode;
+
 
     public int UpgradeLevel { get; private set; } = 0;
     public int MaxUpgrades => data.upgrades?.Count ?? 0;
     public bool CanUpgrade => UpgradeLevel < MaxUpgrades;
     public UpgradeSO NextUpgrade => CanUpgrade ? data.upgrades[UpgradeLevel] : null;
+    public TargetMode TargetMode => runtimeTargetMode;
 
     private float fireCountdown;
     private bool isInfiniteRange;
+    private int value;
 
 
     private void Awake()
@@ -42,8 +45,10 @@ public class Tower : MonoBehaviour
 
     private void Start()
     {
+        value = data.cost;
         FireRate = data.fireRate;
         RuntimeDamage = data.attack.damage;
+        runtimeTargetMode = data.targetMode;
 
         if (data.attack is DartAttackSO dart)
         {
@@ -78,6 +83,11 @@ public class Tower : MonoBehaviour
         PlacedObjectIndex = index;
     }
 
+    public void SetTargetMode(TargetMode mode)
+    {
+        runtimeTargetMode = mode;
+    }
+
     public void Upgrade()
     {
         if (!CanUpgrade) return;
@@ -88,6 +98,7 @@ public class Tower : MonoBehaviour
 
         PlayerMoney.Instance.ChangeMoney(upgrade.cost, false);
 
+        value += upgrade.cost;
         Range += upgrade.rangeBonus;
         FireRate += upgrade.fireRateBonus;
         RuntimeDamage += upgrade.damageBonus;
@@ -101,7 +112,7 @@ public class Tower : MonoBehaviour
     public void Sell()
     {
         PlacementSystem.Instance.RemoveObject(this);
-        PlayerMoney.Instance.ChangeMoney(data.cost * 3 / 4, true);
+        PlayerMoney.Instance.ChangeMoney(value * 3 / 4, true);
     }
 
     void UpdateTarget()
