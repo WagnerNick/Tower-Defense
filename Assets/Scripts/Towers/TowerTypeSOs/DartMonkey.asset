@@ -18,3 +18,6 @@ MonoBehaviour:
   fireRate: 1
   targetMode: 0
   attack: {fileID: 11400000, guid: fd3e16a4ca7be284c8c1f37cc6070e34, type: 2}
+  upgrades:
+  - {fileID: 11400000, guid: 939cb5db71f93f0478330db9f80ff331, type: 2}
+  - {fileID: 11400000, guid: dc0f860c7137cbf4a9b2986a21fb794b, type: 2}

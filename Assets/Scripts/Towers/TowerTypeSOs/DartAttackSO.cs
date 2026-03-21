@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 [CreateAssetMenu(fileName = "DartAttack", menuName = "TD/Attacks/Dart")]
 public class DartAttackSO : AttackSO
@@ -16,15 +15,14 @@ public class DartAttackSO : AttackSO
 
         Projectile dart = ProjectilePool.Instance.Get();
 
-        Vector3 aimPoint = tower.PredictEnemyPosition(enemy, tower.FirePoint.position, speed);
+        Vector3 aimPoint = tower.PredictEnemyPosition(enemy, tower.FirePoint.position, tower.RuntimeProjSpeed);
         Vector3 dir = (aimPoint - tower.FirePoint.position);
         dir.y = 0f;
         dir.Normalize();
 
         tower.RotationPoint.rotation = Quaternion.LookRotation(dir);
-
         dart.transform.SetPositionAndRotation(tower.FirePoint.position, Quaternion.LookRotation(dir));
-        dart.Setup(dir, speed, pierce, hitRadius, damage);
+        dart.Setup(dir, tower.RuntimeProjSpeed, tower.RuntimePierce, hitRadius, tower.RuntimeDamage);
         dart.gameObject.SetActive(true);
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.AnimationUtility;
 using Random = UnityEngine.Random;
 
 public enum TargetMode { First, Last, Close, Strong }
@@ -18,18 +17,43 @@ public class Tower : MonoBehaviour
     public Transform RotationPoint => rotationPoint;
     public Transform FirePoint => firePoint;
     public ParticleSystem FireAnim => fireAnim;
-    public float Range => data.range;
-    public TargetMode TargetMode => data.targetMode;
     public Transform Target { get; private set; }
+    public TargetMode TargetMode => data.targetMode;
+
+    public float Range { get; private set; }
+    public float FireRate { get; private set; }
+    public int RuntimeDamage { get; private set; }
+    public int RuntimePierce { get; private set; }
+    public float RuntimeProjSpeed { get; private set; }
+
+    public int UpgradeLevel { get; private set; } = 0;
+    public int MaxUpgrades => data.upgrades?.Count ?? 0;
+    public bool CanUpgrade => UpgradeLevel < MaxUpgrades;
+    public UpgradeSO NextUpgrade => CanUpgrade ? data.upgrades[UpgradeLevel] : null;
 
     private float fireCountdown;
     private bool isInfiniteRange;
 
+
+    private void Awake()
+    {
+        Range = data.range;
+    }
+
     private void Start()
     {
+        FireRate = data.fireRate;
+        RuntimeDamage = data.attack.damage;
+
+        if (data.attack is DartAttackSO dart)
+        {
+            RuntimePierce = dart.pierce;
+            RuntimeProjSpeed = dart.speed;
+        }
+
         isInfiniteRange = data.attack is IInfiniteRange;
 
-        fireCountdown = Random.Range(0f, 1f / data.fireRate);
+        fireCountdown = Random.Range(0f, 1f / FireRate);
         InvokeRepeating("UpdateTarget", 0f, 0.25f);
     }
 
@@ -43,7 +67,7 @@ public class Tower : MonoBehaviour
             if (canFire)
             {
                 data.attack.Attack(this);
-                fireCountdown = 1f / data.fireRate;
+                fireCountdown = 1f / FireRate;
             }
         }
     }
@@ -56,7 +80,22 @@ public class Tower : MonoBehaviour
 
     public void Upgrade()
     {
-        Debug.Log("Tower Upgraded");
+        if (!CanUpgrade) return;
+
+        UpgradeSO upgrade = data.upgrades[UpgradeLevel];
+
+        if (PlayerMoney.Instance.money < upgrade.cost) return;
+
+        PlayerMoney.Instance.ChangeMoney(upgrade.cost, false);
+
+        Range += upgrade.rangeBonus;
+        FireRate += upgrade.fireRateBonus;
+        RuntimeDamage += upgrade.damageBonus;
+        RuntimePierce += upgrade.pierceBonus;
+        RuntimeProjSpeed += upgrade.projectileSpeed;
+
+        UpgradeLevel++;
+        TowerUI.Instance.Refresh();
     }
 
     public void Sell()
@@ -79,38 +118,25 @@ public class Tower : MonoBehaviour
         foreach (Enemy enemy in enemies)
         {
             float dist = Vector3.Distance(firePoint.position, enemy.center.position);
-            if (dist > data.range)
-                continue;
+            if (!isInfiniteRange && dist > Range) continue;
 
             switch (data.targetMode)
             {
                 case TargetMode.First:
                     if (enemy.pathProgress > bestValue)
-                    {
-                        bestValue = enemy.pathProgress;
-                        bestEnemy = enemy;
-                    }
+                    { bestValue = enemy.pathProgress; bestEnemy = enemy; }
                     break;
                 case TargetMode.Last:
                     if (bestEnemy == null || enemy.pathProgress < bestValue)
-                    {
-                        bestValue = enemy.pathProgress;
-                        bestEnemy = enemy;
-                    }
+                    { bestValue = enemy.pathProgress; bestEnemy = enemy; }
                     break;
                 case TargetMode.Close:
                     if (bestEnemy == null || dist < bestValue)
-                    {
-                        bestValue = dist;
-                        bestEnemy = enemy;
-                    }
+                    { bestValue = dist; bestEnemy = enemy; }
                     break;
                 case TargetMode.Strong:
                     if (bestEnemy == null || enemy.damage > bestValue)
-                    {
-                        bestValue = enemy.damage;
-                        bestEnemy = enemy;
-                    }
+                    { bestValue = enemy.damage; bestEnemy = enemy; }
                     break;
             }
         }
@@ -163,7 +189,8 @@ public class Tower : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        if (rotationPoint == null) return;
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(rotationPoint.position, data != null ? data.range : 1f);
+        Gizmos.DrawWireSphere(rotationPoint.position, data != null ? Range : 1f);
     }
 }

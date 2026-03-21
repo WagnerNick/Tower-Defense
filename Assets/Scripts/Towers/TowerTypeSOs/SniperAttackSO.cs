@@ -1,7 +1,6 @@
-using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 [CreateAssetMenu(fileName = "SniperAttack", menuName = "TD/Attacks/Sniper")]
 public class SniperAttackSO : AttackSO, IInfiniteRange
 {
@@ -18,7 +17,7 @@ public class SniperAttackSO : AttackSO, IInfiniteRange
         if (tower.FireAnim != null)
             tower.FireAnim.Play();
 
-        DamageEnemy(target);
+        DamageEnemy(target, tower.RuntimeDamage);
     }
 
     private Enemy GetBestEnemy(Tower tower)
@@ -38,31 +37,19 @@ public class SniperAttackSO : AttackSO, IInfiniteRange
             {
                 case TargetMode.First:
                     if (e.pathProgress > bestValue)
-                    {
-                        bestValue = e.pathProgress;
-                        best = e;
-                    }
+                    { bestValue = e.pathProgress; best = e; }
                     break;
                 case TargetMode.Last:
                     if (best == null || e.pathProgress < bestValue)
-                    {
-                        bestValue = e.pathProgress;
-                        best = e;
-                    }
+                    { bestValue = e.pathProgress; best = e; }
                     break;
                 case TargetMode.Close:
                     if (best == null || dist < bestValue)
-                    {
-                        bestValue = dist;
-                        best = e;
-                    }
+                    { bestValue = dist; best = e; }
                     break;
                 case TargetMode.Strong:
                     if (best == null || e.damage > bestValue)
-                    {
-                        bestValue = e.damage;
-                        best = e;
-                    }
+                    { bestValue = e.damage; best = e; }
                     break;
 
             }
@@ -70,7 +57,7 @@ public class SniperAttackSO : AttackSO, IInfiniteRange
         return best;
     }
 
-    private void DamageEnemy(Enemy enemy)
+    private void DamageEnemy(Enemy enemy, int damage)
     {
         ShowPopFx(enemy.center.position);
         enemy.GetComponentInParent<IDamageable>()?.Damage(damage);

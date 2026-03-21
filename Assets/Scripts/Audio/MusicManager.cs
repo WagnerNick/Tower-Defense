@@ -5,14 +5,24 @@ public class MusicManager : PersistentSingleton<MusicManager>
     private static AudioSource audioSource;
     private static MusicLibrary musicLibrary;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+        if (instance != this) return;
+        audioSource = GetComponent<AudioSource>();
+        musicLibrary = GetComponent<MusicLibrary>();
+    }
+
+    private void OnEnable()
+    {
+        if (instance != this) return;
         audioSource = GetComponent<AudioSource>();
         musicLibrary = GetComponent<MusicLibrary>();
     }
 
     public static void Play(string soundName)
     {
+        if (instance == null || audioSource == null || musicLibrary == null) return;
         AudioClip audioClip = musicLibrary.GetRandomClip(soundName);
         if (audioClip != null)
         {
@@ -23,6 +33,7 @@ public class MusicManager : PersistentSingleton<MusicManager>
 
     public static void Stop()
     {
-        audioSource.Stop();
+        if (audioSource != null)
+            audioSource.Stop();
     }
 }

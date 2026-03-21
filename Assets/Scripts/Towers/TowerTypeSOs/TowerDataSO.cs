@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TowerData", menuName = "TD/Tower Data")]
@@ -14,4 +16,7 @@ public class TowerDataSO : ScriptableObject
     [Header("Attack")]
     public TargetMode targetMode;
     public AttackSO attack;
+
+    [Header("Upgrades")]
+    public List<UpgradeSO> upgrades = new();
 }

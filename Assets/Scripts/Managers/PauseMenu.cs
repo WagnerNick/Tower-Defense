@@ -4,6 +4,7 @@ using UnityEngine;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenu;
+    public SpeedUpManager speedUpManager;
 
     private void Start()
     {
@@ -27,6 +28,9 @@ public class PauseMenu : MonoBehaviour
     public void Toggle()
     {
         pauseMenu.SetActive(!pauseMenu.activeSelf);
-        Time.timeScale = pauseMenu.activeSelf ? 0f : 1f;
+        if (speedUpManager != null && speedUpManager.spedUp)
+            Time.timeScale = pauseMenu.activeSelf ? 0f : speedUpManager.speed;
+        else
+            Time.timeScale = pauseMenu.activeSelf ? 0f : 1f;
     }
 }

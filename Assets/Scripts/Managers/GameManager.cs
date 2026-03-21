@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     public bool gameIsEnded = false;
     public GameObject gameOverUI;
+    public GameObject victoryUI;
 
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Slider bgmSlider;
@@ -82,6 +83,9 @@ public class GameManager : MonoBehaviour
 
     public void Victory()
     {
-        Debug.Log("You won");
+        gameIsEnded = true;
+        SaveManager.Instance?.DeleteSave();
+        victoryUI.SetActive(true);
+        InputManager.Instance.menuOpen = true;
     }
 }

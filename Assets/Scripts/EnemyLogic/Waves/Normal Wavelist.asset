@@ -10,22 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10762f554502398468cc0f4003ca517a, type: 3}
-  m_Name: Easy Wavelist
+  m_Name: Normal Wavelist
   m_EditorClassIdentifier: Assembly-CSharp::WaveDataSO
   waves:
   - label: Wave 1
     groups:
     - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
-      count: 10
+      count: 20
       startDelay: 0
-      interval: 1.5
+      interval: 1
   - label: Wave 2
     groups:
     - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
-      count: 5
+      count: 35
       startDelay: 0
-      interval: 1.5
+      interval: 1
+  - label: Wave 3
+    groups:
+    - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
+      count: 15
+      startDelay: 0
+      interval: 1
     - balloonType: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
-      count: 3
-      startDelay: 8
+      count: 5
+      startDelay: 16
       interval: 0.8
+    - balloonType: {fileID: 11400000, guid: 1969a2aa51b417f47b0cb4e6f0ec2716, type: 2}
+      count: 10
+      startDelay: 21
+      interval: 1

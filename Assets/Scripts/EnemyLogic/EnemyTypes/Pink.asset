@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbc9012dcdf1ff04ba14441075029a3a, type: 3}
-  m_Name: Green
+  m_Name: Pink
   m_EditorClassIdentifier: Assembly-CSharp::BalloonTypeSO
-  balloonName: Green
-  color: {r: 0, g: 1, b: 0.11118245, a: 1}
+  balloonName: Pink
+  color: {r: 1, g: 0, b: 0.60409117, a: 1}
   health: 1
-  speed: 1.8
-  damage: 3
-  scale: 1
-  popsInto: {fileID: 11400000, guid: 38ccd87b4deb15f499e07967430f4b01, type: 2}
+  speed: 3.5
+  damage: 5
+  scale: 0.9
+  popsInto: {fileID: 11400000, guid: d52b49c463a9a9d4cbc372c051d3f4a8, type: 2}

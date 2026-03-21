@@ -35,8 +35,9 @@ public abstract class PersistentSingleton<T> : MonoBehaviour where T : Component
         {
             if (instance != this)
             {
-                Destroy(gameObject);
+                DestroyImmediate(gameObject);
             }
         }
     }
+    public static bool IsAvailable => instance != null;
 }
