@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,7 +30,8 @@ public class TowerSelector : MonoBehaviour
             rangeDisplay = null;
         }
 
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Vector2 screenPos = InputManager.Instance.GetPointerScreenPosition();
+        Ray ray = Camera.main.ScreenPointToRay(screenPos);
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, towerLayer))
         {

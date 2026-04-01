@@ -20,6 +20,7 @@ public class InputManager : MonoBehaviour
     public event Action OnClick, OnCancel, OnMenu;
 
     private Vector3 lastPos;
+    private Vector2 lastPointPos;
 
     void Awake()
     {
@@ -36,26 +37,77 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
+        GetPointerScreenPosition();
+        HandleTouchClick();
         if (menuAction.WasPressedThisFrame())
             OnMenu?.Invoke();
-        if (clickAction.WasPressedThisFrame())
-            OnClick?.Invoke();
         if (cancelAction.WasPressedThisFrame())
             OnCancel?.Invoke();
     }
 
-    public bool IsPointerOverUI() => EventSystem.current.IsPointerOverGameObject();
+    private void HandleTouchClick()
+    {
+        if (Touchscreen.current != null)
+        {
+            var touch = Touchscreen.current.primaryTouch;
+
+            if (touch.press.wasReleasedThisFrame)
+                OnClick?.Invoke();
+        }
+        else
+        {
+            if (clickAction.WasPressedThisFrame())
+                OnClick?.Invoke();
+        }
+    }
+
+    public bool IsPointerOverUI()
+    {
+        if (EventSystem.current == null)
+            return false;
+
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            return EventSystem.current.IsPointerOverGameObject(Touchscreen.current.primaryTouch.touchId.ReadValue());
+        }
+
+        return EventSystem.current.IsPointerOverGameObject();
+
+    }
+
+    public Vector2 GetPointerScreenPosition()
+    {
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.position.ReadValue() != Vector2.zero)
+        {
+            lastPointPos = Touchscreen.current.primaryTouch.position.ReadValue();
+        }
+        else if (Mouse.current != null)
+        {
+            lastPointPos = Mouse.current.position.ReadValue();
+        }
+        return lastPointPos;
+    }
 
     public Vector3 GetMapPos()
     {
-        Vector3 mousePos = Mouse.current.position.ReadValue();
-        mousePos.z = sceneCamera.nearClipPlane;
-        Ray ray = sceneCamera.ScreenPointToRay(mousePos);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100, placementLayer))
+        Vector2 screenPos = Vector2.zero;
+
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            screenPos = Touchscreen.current.primaryTouch.position.ReadValue();
+        }
+        else if (Mouse.current != null)
+        {
+            screenPos = Mouse.current.position.ReadValue();
+        }
+
+        Ray ray = sceneCamera.ScreenPointToRay(screenPos);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 100, placementLayer))
         {
             lastPos = hit.point;
         }
+
         return lastPos;
     }
 }
