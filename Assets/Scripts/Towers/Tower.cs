@@ -24,6 +24,7 @@ public class Tower : MonoBehaviour
     public int RuntimeDamage { get; private set; }
     public int RuntimePierce { get; private set; }
     public float RuntimeProjSpeed { get; private set; }
+    public float RuntimeSlowAmount { get; private set; }
     private TargetMode runtimeTargetMode;
 
 
@@ -54,6 +55,13 @@ public class Tower : MonoBehaviour
         {
             RuntimePierce = dart.pierce;
             RuntimeProjSpeed = dart.speed;
+        }
+
+        if (data.attack is GlueAttackSO glue)
+        {
+            RuntimeSlowAmount = glue.slowAmount;
+            RuntimePierce = glue.pierce;
+            RuntimeProjSpeed = glue.speed;
         }
 
         isInfiniteRange = data.attack is IInfiniteRange;

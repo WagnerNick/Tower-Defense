@@ -7,15 +7,17 @@ public class Projectile : MonoBehaviour
     private int currentPierce;
     public float hitRadius;
     public int damage;
+    public float slowAmount;
 
     private Vector3 direction;
     private List<Enemy> hitEnemies = new List<Enemy>();
 
-    public void Setup(Vector3 dir, float speed, int pierce, float hitRadius, int damage)
+    public void Setup(Vector3 dir, float speed, int pierce, float hitRadius, int damage, float slowAmount)
     {
         this.speed = speed;
         this.hitRadius = hitRadius;
         this.damage = damage;
+        this.slowAmount = slowAmount;
         currentPierce = pierce;
         direction = dir.normalized;
         transform.forward = direction;

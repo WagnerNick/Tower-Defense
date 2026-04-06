@@ -59,6 +59,7 @@ public class WaveSpawner : MonoBehaviour
 
         PlayerMoney.Instance.ChangeMoney(100 + waveIndex, true);
         SaveManager.Instance.Save(waveIndex);
+        GameEvents.WaveCompleted(waveIndex);
 
         spawning = false;
     }

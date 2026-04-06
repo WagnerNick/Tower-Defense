@@ -1,19 +1,20 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DartAttack", menuName = "TD/Attacks/Dart")]
-public class DartAttackSO : AttackSO
+[CreateAssetMenu(fileName = "GlueAttack", menuName = "TD/Attacks/Glue")]
+public class GlueAttackSO : AttackSO
 {
     [Header("Dart Stats")]
     public float speed = 50f;
     public int pierce = 2;
     public float hitRadius = 0.3f;
+    public float slowAmount = 0.5f;
 
     public override void Attack(Tower tower)
     {
         Enemy enemy = tower.Target.GetComponentInParent<Enemy>();
         if (enemy == null) return;
 
-        Projectile dart = ProjectilePool.Instance.Get();
+        Projectile glue = ProjectilePool.Instance.Get();
 
         Vector3 aimPoint = tower.PredictEnemyPosition(enemy, tower.FirePoint.position, tower.RuntimeProjSpeed);
         Vector3 dir = (aimPoint - tower.FirePoint.position);
@@ -21,8 +22,8 @@ public class DartAttackSO : AttackSO
         dir.Normalize();
 
         tower.RotationPoint.rotation = Quaternion.LookRotation(dir);
-        dart.transform.SetPositionAndRotation(tower.FirePoint.position, Quaternion.LookRotation(dir));
-        dart.Setup(dir, tower.RuntimeProjSpeed, tower.RuntimePierce, hitRadius, tower.RuntimeDamage, 0);
-        dart.gameObject.SetActive(true);
+        glue.transform.SetPositionAndRotation(tower.FirePoint.position, Quaternion.LookRotation(dir));
+        glue.Setup(dir, tower.RuntimeProjSpeed, tower.RuntimePierce, hitRadius, tower.RuntimeDamage, slowAmount);
+        glue.gameObject.SetActive(true);
     }
 }

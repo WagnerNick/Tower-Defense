@@ -7,6 +7,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     private BalloonTypeSO initialType;
     private BalloonTypeSO currentType;
     private int currentHealth;
+    private static int totalPops = 0;
     private MaterialPropertyBlock propertyBlock;
 
     private Enemy enemy;
@@ -50,6 +51,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         }
         else
         {
+            totalPops++;
+            GameEvents.EnemyPopped(totalPops);
             EnemyPool.Instance.ReturnToPool(enemy);
         }
     }

@@ -61,6 +61,7 @@ public class PlacementState : IBuildingState
         selectedData.AddObjectAt(gridPos, database.objectData[selectedObjectIndex].Size, database.objectData[selectedObjectIndex].ID, index);
 
         previewSystem.UpdatePos(grid.CellToWorld(gridPos), false);
+        GameEvents.TowerPlaced();
     }
 
     private bool CheckPlacement(Vector3Int gridPos, int selectedObjectIndex)

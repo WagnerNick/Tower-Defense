@@ -87,5 +87,6 @@ public class GameManager : MonoBehaviour
         SaveManager.Instance?.DeleteSave();
         victoryUI.SetActive(true);
         InputManager.Instance.menuOpen = true;
+        GameEvents.Victory();
     }
 }
